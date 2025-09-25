@@ -1,0 +1,49 @@
+
+name: diffindo Backend
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+      - name: Run Unit Tests
+        run: mvn test
+
+#  deploy_to_prod:
+#    needs: build_and_test
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    environment: prod
+#    steps:
+#      - name: Checkout Code
+#        uses: actions/checkout@v4
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: us-east-1
+#      - name: Download Build Artifact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: spring-boot-app
+#          path: target/
+#      - name: Deploy to Elastic Beanstalk
+#        run: |
+#          aws elasticbeanstalk create-application-version --application-name your-app-name-prod --version-label ${{ github.run_number }} --source-bundle S3Bucket=your-s3-bucket-name,S3Key=your-app-name.jar
+#          aws elasticbeanstalk update-environment --application-name your-app-name-prod --environment-name your-env-name-prod --version-label ${{ github.run_number }}
