@@ -27,14 +27,9 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
-        try {
-            logger.info("initiating user registration");
-            userService.registerUser(userRegistrationDto.getName(), userRegistrationDto.getPhoneNumber(), userRegistrationDto.getEmail(), userRegistrationDto.getPassword());
-            logger.info("user registration completed successfully");
-            return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
-        } catch (Exception e) {
-            logger.info("user registration failed");
-            return new ResponseEntity<>("Registration failed " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        logger.info("initiating user registration");
+        userService.registerUser(userRegistrationDto.getName(), userRegistrationDto.getPhoneNumber(), userRegistrationDto.getEmail(), userRegistrationDto.getPassword());
+        logger.info("user registration completed successfully");
+        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
 }

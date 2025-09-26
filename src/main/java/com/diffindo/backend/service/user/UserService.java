@@ -3,6 +3,7 @@ package com.diffindo.backend.service.user;
 import com.diffindo.backend.model.User;
 import com.diffindo.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
