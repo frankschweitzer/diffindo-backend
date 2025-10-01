@@ -1,5 +1,6 @@
 package com.diffindo.backend.controller;
 
+import com.diffindo.backend.dto.UserLoginDto;
 import com.diffindo.backend.dto.UserRegistrationDto;
 import com.diffindo.backend.service.user.UserService;
 import org.slf4j.Logger;
@@ -31,5 +32,13 @@ public class UserController {
         userService.registerUser(userRegistrationDto.getName(), userRegistrationDto.getPhoneNumber(), userRegistrationDto.getEmail(), userRegistrationDto.getPassword());
         logger.info("user registration completed successfully");
         return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUserAndGetToken(@RequestBody UserLoginDto userLoginDto) {
+        logger.info("initiating user login");
+        String token = null;
+        logger.info("user login and token retrieval success");
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 }
