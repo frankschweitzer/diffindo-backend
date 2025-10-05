@@ -1,5 +1,6 @@
 package com.diffindo.backend.config;
 
+import com.diffindo.backend.security.jwt.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,11 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsService userDetailsService) {
-        this.jwtAuthFilter = jwtAuthFilter;
         this.userDetailsService = userDetailsService;
     }
 
@@ -31,7 +30,7 @@ public class SecurityConfig {
      *  Define endpoint access rules and JWT filter setup
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
         // disables CSRF protection because we won't be using cookies for session management.
         http.csrf(AbstractHttpConfigurer::disable);
 
