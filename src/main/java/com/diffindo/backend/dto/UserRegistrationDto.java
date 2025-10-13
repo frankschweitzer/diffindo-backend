@@ -2,8 +2,10 @@ package com.diffindo.backend.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserRegistrationDto {
     private String name;
     private String email;

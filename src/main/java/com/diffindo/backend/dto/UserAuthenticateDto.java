@@ -2,9 +2,11 @@ package com.diffindo.backend.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
-public class UserLoginDto {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserAuthenticateDto {
     private String email;
     private String password;
 }
