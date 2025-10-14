@@ -30,7 +30,9 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(userRegistrationDto.getPassword()))
                 .role(Role.USER)
                 .build();
+
         userRepository.save(user);
+
         var jwtToken = jwtService.generateToken(user);
         return UserAuthenticationResponseDto.builder()
                 .token(jwtToken)
@@ -44,8 +46,10 @@ public class AuthenticationService {
                         userAuthenticateDto.getPassword()
                 )
         );
+
         var user = userRepository.findByEmail(userAuthenticateDto.getEmail())
                 .orElseThrow();
+
         var jwtToken = jwtService.generateToken(user);
         return UserAuthenticationResponseDto.builder()
                 .token(jwtToken)
