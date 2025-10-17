@@ -21,8 +21,14 @@ public class GroupController {
     private final GroupCreationService groupCreationService;
 
     @PostMapping("/create")
-    public ResponseEntity<GroupCreatedResponseDto> createGroup(@RequestBody GroupCreationDto groupCreationDto) {
+    public ResponseEntity<GroupCreatedResponseDto> createGroup(@RequestBody GroupCreationRequestDto groupCreationRequestDto) {
         logger.info("initiating group creation");
-        return ResponseEntity.ok(groupCreationService.create(groupCreationDto));
+        return ResponseEntity.ok(groupCreationService.create(groupCreationRequestDto));
+    }
+
+    @GetMapping("/fetch")
+    public ResponseEntity<GroupFetchResponseDto> fetchGroups(@RequestBody GroupFetchRequestDto groupFetchRequestDto) {
+        logger.info("initiating retrieval of all groups user is in");
+        return ResponseEntity.ok(groupCreationService.fetchAll(groupFetchRequestDto));
     }
 }
