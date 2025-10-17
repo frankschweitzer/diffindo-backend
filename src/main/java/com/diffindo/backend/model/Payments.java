@@ -16,10 +16,10 @@ public class Payments {
     private Long paymentId;
 
     @Column(nullable = false)
-    private String groupId;
+    private Long groupId;
 
     @Column(nullable = false)
-    private String userId;
+    private Long userId;
 
     @Column(nullable = false)
     private Long individualAmount;

@@ -2,7 +2,7 @@ package com.diffindo.backend.controller;
 
 import com.diffindo.backend.dto.GroupCreatedResponseDto;
 import com.diffindo.backend.dto.GroupCreationDto;
-import com.diffindo.backend.service.group.GroupStateService;
+import com.diffindo.backend.service.group.GroupCreationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +16,11 @@ public class GroupController {
 
     private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
 
-    private final GroupStateService groupStateService;
+    private final GroupCreationService groupCreationService;
 
     @PostMapping("/create")
     public ResponseEntity<GroupCreatedResponseDto> createGroup(@RequestBody GroupCreationDto groupCreationDto) {
         logger.info("initiating group creation");
-        return ResponseEntity.ok(groupStateService.create(groupCreationDto));
+        return ResponseEntity.ok(groupCreationService.create(groupCreationDto));
     }
 }
