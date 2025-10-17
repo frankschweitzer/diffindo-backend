@@ -2,8 +2,8 @@ package com.diffindo.backend.service.user;
 
 import com.diffindo.backend.controller.GroupController;
 import com.diffindo.backend.dto.UserAuthenticationResponseDto;
-import com.diffindo.backend.dto.UserAuthenticateDto;
-import com.diffindo.backend.dto.UserRegistrationDto;
+import com.diffindo.backend.dto.UserAuthenticateRequestDto;
+import com.diffindo.backend.dto.UserRegistrationRequestDto;
 import com.diffindo.backend.model.Role;
 import com.diffindo.backend.model.User;
 import com.diffindo.backend.repository.UserRepository;
@@ -27,12 +27,12 @@ public class AuthenticationService {
     private final JwtUtil jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public UserAuthenticationResponseDto register(UserRegistrationDto userRegistrationDto) {
+    public UserAuthenticationResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto) {
         var user = User.builder()
-                .name(userRegistrationDto.getName())
-                .email(userRegistrationDto.getEmail())
-                .phoneNumber(userRegistrationDto.getPhoneNumber())
-                .password(passwordEncoder.encode(userRegistrationDto.getPassword()))
+                .name(userRegistrationRequestDto.getName())
+                .email(userRegistrationRequestDto.getEmail())
+                .phoneNumber(userRegistrationRequestDto.getPhoneNumber())
+                .password(passwordEncoder.encode(userRegistrationRequestDto.getPassword()))
                 .role(Role.USER)
                 .build();
 
@@ -45,15 +45,15 @@ public class AuthenticationService {
                 .build();
     }
 
-    public UserAuthenticationResponseDto authenticate(UserAuthenticateDto userAuthenticateDto) {
+    public UserAuthenticationResponseDto authenticate(UserAuthenticateRequestDto userAuthenticateRequestDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userAuthenticateDto.getEmail(),
-                        userAuthenticateDto.getPassword()
+                        userAuthenticateRequestDto.getEmail(),
+                        userAuthenticateRequestDto.getPassword()
                 )
         );
 
-        var user = userRepository.findByEmail(userAuthenticateDto.getEmail())
+        var user = userRepository.findByEmail(userAuthenticateRequestDto.getEmail())
                 .orElseThrow();
 
         var jwtToken = jwtService.generateToken(user);
