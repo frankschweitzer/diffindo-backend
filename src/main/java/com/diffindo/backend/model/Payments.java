@@ -3,28 +3,26 @@ package com.diffindo.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(name = "groups")
-public class Group {
+@Table(name = "payments")
+public class Payments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long groupId;
+    private Long paymentId;
 
     @Column(nullable = false)
-    private String merchant;
+    private String groupId;
 
     @Column(nullable = false)
-    private Long totalCost;
+    private String userId;
 
-    @ElementCollection
-    private List<String> groupPhoneNumbers;
+    @Column(nullable = false)
+    private Long individualAmount;
 
     @Column(nullable = false)
     private String status;

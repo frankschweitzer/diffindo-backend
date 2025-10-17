@@ -19,7 +19,7 @@ public class GroupStateService {
         var group = Group.builder()
                 .merchant(groupCreationDto.getMerchant())
                 .totalCost(groupCreationDto.getTotalCost())
-                .groupSize(groupCreationDto.getGroupSize())
+                .groupPhoneNumbers(groupCreationDto.getGroupPhoneNumbers())
                 .status(APP_CONSTANTS.GROUP_STATUS_PENDING)
                 .build();
 

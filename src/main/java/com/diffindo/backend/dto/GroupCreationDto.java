@@ -2,6 +2,8 @@ package com.diffindo.backend.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -9,5 +11,5 @@ import lombok.*;
 public class GroupCreationDto {
     private String merchant;
     private Long totalCost;
-    private int groupSize;
+    private List<String> groupPhoneNumbers;
 }
