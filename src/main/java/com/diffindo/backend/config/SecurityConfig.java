@@ -55,6 +55,9 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * CORs setup is temporary for local testing
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

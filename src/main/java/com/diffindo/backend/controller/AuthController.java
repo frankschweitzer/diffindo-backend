@@ -1,8 +1,8 @@
 package com.diffindo.backend.controller;
 
 import com.diffindo.backend.dto.UserAuthenticationResponseDto;
-import com.diffindo.backend.dto.UserAuthenticateDto;
-import com.diffindo.backend.dto.UserRegistrationDto;
+import com.diffindo.backend.dto.UserAuthenticateRequestDto;
+import com.diffindo.backend.dto.UserRegistrationRequestDto;
 import com.diffindo.backend.service.user.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,14 +23,14 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserAuthenticationResponseDto> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
+    public ResponseEntity<UserAuthenticationResponseDto> registerUser(@RequestBody UserRegistrationRequestDto userRegistrationRequestDto) {
         logger.info("initiating user registration");
-        return ResponseEntity.ok(authenticationService.register(userRegistrationDto));
+        return ResponseEntity.ok(authenticationService.register(userRegistrationRequestDto));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<UserAuthenticationResponseDto> loginUserAndGetToken(@RequestBody UserAuthenticateDto userAuthenticateDto) {
+    public ResponseEntity<UserAuthenticationResponseDto> loginUserAndGetToken(@RequestBody UserAuthenticateRequestDto userAuthenticateRequestDto) {
         logger.info("initiating user login");
-        return ResponseEntity.ok(authenticationService.authenticate(userAuthenticateDto));
+        return ResponseEntity.ok(authenticationService.authenticate(userAuthenticateRequestDto));
     }
 }
