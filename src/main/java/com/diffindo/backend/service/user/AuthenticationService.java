@@ -1,5 +1,6 @@
 package com.diffindo.backend.service.user;
 
+import com.diffindo.backend.controller.GroupController;
 import com.diffindo.backend.dto.UserAuthenticationResponseDto;
 import com.diffindo.backend.dto.UserAuthenticateRequestDto;
 import com.diffindo.backend.dto.UserRegistrationRequestDto;
