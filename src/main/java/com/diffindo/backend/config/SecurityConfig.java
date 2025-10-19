@@ -39,7 +39,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests((request) -> request
                 // allow unauthenticated access to the user registration endpoint.
-                .requestMatchers("/api/auth/**", "/api/groups/create").permitAll()
+                .requestMatchers("/error", "/api/auth/**", "/api/groups/create").permitAll()
 
                 // require authentication for all other API endpoints.
                 .anyRequest().authenticated()
