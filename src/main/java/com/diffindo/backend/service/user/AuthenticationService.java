@@ -1,9 +1,9 @@
 package com.diffindo.backend.service.user;
 
-import com.diffindo.backend.controller.GroupController;
 import com.diffindo.backend.dto.UserAuthenticationResponseDto;
 import com.diffindo.backend.dto.UserAuthenticateRequestDto;
 import com.diffindo.backend.dto.UserRegistrationRequestDto;
+import com.diffindo.backend.exceptions.UserNotFoundException;
 import com.diffindo.backend.model.Role;
 import com.diffindo.backend.model.User;
 import com.diffindo.backend.repository.UserRepository;
@@ -54,7 +54,7 @@ public class AuthenticationService {
         );
 
         var user = userRepository.findByEmail(userAuthenticateRequestDto.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new UserNotFoundException("user could not be found for email: " + userAuthenticateRequestDto.getEmail()));
 
         var jwtToken = jwtService.generateToken(user);
         return UserAuthenticationResponseDto.builder()
