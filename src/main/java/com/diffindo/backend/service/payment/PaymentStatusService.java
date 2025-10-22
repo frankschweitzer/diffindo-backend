@@ -6,6 +6,8 @@ import com.diffindo.backend.dto.PaymentDecisionResponseDto;
 import com.diffindo.backend.dto.PaymentFetchRequestDto;
 import com.diffindo.backend.dto.PaymentFetchResponseDto;
 import com.diffindo.backend.exceptions.GroupNotFoundException;
+import com.diffindo.backend.exceptions.PaymentNotFoundException;
+import com.diffindo.backend.exceptions.UserNotFoundException;
 import com.diffindo.backend.model.Group;
 import com.diffindo.backend.model.Payment;
 import com.diffindo.backend.model.User;
@@ -39,9 +41,7 @@ public class PaymentStatusService {
         Optional<Payment> payment = paymentRepository.findById(paymentDecisionRequestDto.getPaymentId());
         if (payment.isEmpty()) {
             logger.info("payment {} does not exist", paymentDecisionRequestDto.getPaymentId());
-            return PaymentDecisionResponseDto.builder()
-                    .message("Could not find payment.")
-                    .build();
+            throw new PaymentNotFoundException("paymentId: " + paymentDecisionRequestDto.getPaymentId() + " does not exist");
         }
 
         // update payment status in PAYMENTS table
@@ -84,18 +84,14 @@ public class PaymentStatusService {
             Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
             if (user.isEmpty()) {
                 logger.info("user with phoneNumber {} does not exist", phoneNumber);
-                return PaymentDecisionResponseDto.builder()
-                        .message("Could not find user.")
-                        .build();
+                throw new UserNotFoundException("user with phoneNumber: " + phoneNumber + " - does not exist");
             }
 
             // search for userId & groupId in PAYMENTS table
             Optional<Payment> userPayment = paymentRepository.findPaymentByGroupIdAndUserId(group.get().getGroupId(), user.get().getUserId());
             if (userPayment.isEmpty()) {
                 logger.info("user payment does not exist in group");
-                return PaymentDecisionResponseDto.builder()
-                        .message("Could not find users payment in group.")
-                        .build();
+                throw new PaymentNotFoundException("userId " + user.get().getUserId() + " is not in the following Group: " + group.get().getGroupId());
             }
 
             // if a user is still pending then return
