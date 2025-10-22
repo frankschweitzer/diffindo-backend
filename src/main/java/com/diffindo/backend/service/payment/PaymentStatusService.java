@@ -5,6 +5,7 @@ import com.diffindo.backend.dto.PaymentDecisionRequestDto;
 import com.diffindo.backend.dto.PaymentDecisionResponseDto;
 import com.diffindo.backend.dto.PaymentFetchRequestDto;
 import com.diffindo.backend.dto.PaymentFetchResponseDto;
+import com.diffindo.backend.exceptions.GroupNotFoundException;
 import com.diffindo.backend.model.Group;
 import com.diffindo.backend.model.Payment;
 import com.diffindo.backend.model.User;
@@ -59,9 +60,7 @@ public class PaymentStatusService {
         Optional<Group> group = groupRepository.findById(paymentDecisionRequestDto.getGroupId());
         if (group.isEmpty()) {
             logger.info("group {} does not exist", paymentDecisionRequestDto.getGroupId());
-            return PaymentDecisionResponseDto.builder()
-                    .message("Could not find group.")
-                    .build();
+            throw new GroupNotFoundException("Group " + paymentDecisionRequestDto.getGroupId() + " does not exist");
         }
 
         // if it was a decline initiate group status to DECLINED in GROUPS table

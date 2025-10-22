@@ -5,6 +5,7 @@ import com.diffindo.backend.dto.GroupCreatedResponseDto;
 import com.diffindo.backend.dto.GroupCreationRequestDto;
 import com.diffindo.backend.dto.GroupFetchRequestDto;
 import com.diffindo.backend.dto.GroupFetchResponseDto;
+import com.diffindo.backend.exceptions.UserNotFoundException;
 import com.diffindo.backend.model.Group;
 import com.diffindo.backend.model.Payment;
 import com.diffindo.backend.model.User;
@@ -49,7 +50,7 @@ public class GroupCreationService {
         Long individualAmount = (groupCreationRequestDto.getTotalCost() / groupCreationRequestDto.getGroupPhoneNumbers().size());
         for (String phoneNumber : groupCreationRequestDto.getGroupPhoneNumbers()) {
             Optional<User> currentUser = Optional.ofNullable(userRepository.findByPhoneNumber(phoneNumber)
-                    .orElseThrow(() -> new UsernameNotFoundException("user does not exist")));
+                    .orElseThrow(() -> new UserNotFoundException("Attempted to create a group but not all Users are registered.")));
 
             var payment = Payment.builder()
                     .groupId(group.getGroupId())
@@ -69,7 +70,7 @@ public class GroupCreationService {
 
     public GroupFetchResponseDto fetchAll(GroupFetchRequestDto groupFetchRequestDto) {
         Optional<User> user = Optional.ofNullable(userRepository.findById(groupFetchRequestDto.getUserId())
-                .orElseThrow(() -> new UsernameNotFoundException("user does not exist")));
+                .orElseThrow(() -> new UserNotFoundException("User attempting to retrieve groups does not exist.")));
 
         Optional<List<Group>> groups = groupRepository.findByGroupPhoneNumbersContaining(user.get().getPhoneNumber());
         if (groups.isEmpty()) {
