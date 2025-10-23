@@ -13,10 +13,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "cards")
 public class Card {
-    /**
-     * TODO --> consider placing this in the USERS table to make it easier
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cardId;
+
+    @Column(nullable = false)
+    private Long userId;
+
+    @Column(nullable = false)
+    private String tokenizedCard;
 }

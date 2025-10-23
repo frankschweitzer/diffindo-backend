@@ -7,6 +7,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StripeService {
 
+    public void setCardOnFile() {
+        /**
+         * TODO
+         *
+         * allow users to get a card on file
+         */
+    }
+
     public void placeHoldOnCard() {
         /**
          * TODO
