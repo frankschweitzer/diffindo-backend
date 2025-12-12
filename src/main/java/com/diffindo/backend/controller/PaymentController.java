@@ -2,7 +2,6 @@ package com.diffindo.backend.controller;
 
 import com.diffindo.backend.dto.*;
 import com.diffindo.backend.exceptions.BadTokenException;
-import com.diffindo.backend.repository.PaymentRepository;
 import com.diffindo.backend.service.payment.PaymentStatusService;
 import com.diffindo.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;

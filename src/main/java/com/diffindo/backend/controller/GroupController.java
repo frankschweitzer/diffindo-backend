@@ -2,7 +2,6 @@ package com.diffindo.backend.controller;
 
 import com.diffindo.backend.dto.GroupCreatedResponseDto;
 import com.diffindo.backend.dto.GroupCreationRequestDto;
-//import com.diffindo.backend.dto.GroupFetchRequestDto;
 import com.diffindo.backend.dto.GroupFetchResponseDto;
 import com.diffindo.backend.exceptions.BadTokenException;
 import com.diffindo.backend.service.group.GroupService;
