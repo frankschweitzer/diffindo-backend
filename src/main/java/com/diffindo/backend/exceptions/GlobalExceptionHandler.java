@@ -31,4 +31,12 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(BadTokenException.class)
+    public ResponseEntity<ErrorResponse> handleBadTokenException(BadTokenException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }

@@ -3,7 +3,6 @@ package com.diffindo.backend.service.payment;
 import com.diffindo.backend.consants.AppConstants;
 import com.diffindo.backend.dto.PaymentDecisionRequestDto;
 import com.diffindo.backend.dto.PaymentDecisionResponseDto;
-import com.diffindo.backend.dto.PaymentFetchRequestDto;
 import com.diffindo.backend.dto.PaymentFetchResponseDto;
 import com.diffindo.backend.exceptions.GroupNotFoundException;
 import com.diffindo.backend.exceptions.PaymentNotFoundException;
@@ -36,12 +35,21 @@ public class PaymentStatusService {
 
     private final StripeService stripeService;
 
-    public PaymentDecisionResponseDto executePaymentDecision(PaymentDecisionRequestDto paymentDecisionRequestDto) {
-        // ensure payment exists
-        Optional<Payment> payment = paymentRepository.findById(paymentDecisionRequestDto.getPaymentId());
+    // TODO: address if people can change their payment decision or if the choice should be immutable
+    public PaymentDecisionResponseDto executePaymentDecision(PaymentDecisionRequestDto paymentDecisionRequestDto, String username) {
+        // obtain userId from username
+        Optional<User> requestingUser = userRepository.findByEmail(username);
+        if (requestingUser.isEmpty()) {
+            logger.info("userId could not be resolved from token");
+            throw new UserNotFoundException("userId could not be resolved from token");
+        }
+        Long userId = requestingUser.get().getUserId();
+
+        // ensure payment exists in that group for the user
+        Optional<Payment> payment = paymentRepository.findPaymentByGroupIdAndUserId(paymentDecisionRequestDto.getGroupId(), userId);
         if (payment.isEmpty()) {
-            logger.info("payment {} does not exist", paymentDecisionRequestDto.getPaymentId());
-            throw new PaymentNotFoundException("paymentId: " + paymentDecisionRequestDto.getPaymentId() + " does not exist");
+            logger.info("payment for group id: {} and user id: {} does not exist", paymentDecisionRequestDto.getGroupId(), userId);
+            throw new PaymentNotFoundException("payment for groupId: " + paymentDecisionRequestDto.getGroupId() + "and userId: " + userId + " does not exist");
         }
 
         // update payment status in PAYMENTS table
@@ -119,8 +127,16 @@ public class PaymentStatusService {
                 .build();
     }
 
-    public PaymentFetchResponseDto fetchAllPayments(PaymentFetchRequestDto paymentFetchRequestDto) {
-        Optional<List<Payment>> payments = paymentRepository.findAllByUserId(paymentFetchRequestDto.getUserId());
+    public PaymentFetchResponseDto fetchAllPayments(String username) {
+        // obtain userId from username
+        Optional<User> requestingUser = userRepository.findByEmail(username);
+        if (requestingUser.isEmpty()) {
+            logger.info("userId could not be resolved from token");
+            throw new UserNotFoundException("userId could not be resolved from token");
+        }
+        Long userId = requestingUser.get().getUserId();
+
+        Optional<List<Payment>> payments = paymentRepository.findAllByUserId(userId);
         return payments.map(paymentList -> PaymentFetchResponseDto.builder()
                 .payments(paymentList)
                 .build()).orElse(null);

@@ -7,6 +7,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    Optional<Group> findByGroupId(Long groupId);
     Optional<List<Group>> findByGroupPhoneNumbersContaining(String phoneNumber);
 }

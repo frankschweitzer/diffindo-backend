@@ -6,7 +6,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentDecisionRequestDto {
-    private Long groupId;
-    private boolean approved;
+public class CardSetResponseDto {
+    private Long cardId;
 }

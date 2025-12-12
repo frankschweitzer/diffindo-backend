@@ -3,7 +3,6 @@ package com.diffindo.backend.service.group;
 import com.diffindo.backend.consants.AppConstants;
 import com.diffindo.backend.dto.GroupCreatedResponseDto;
 import com.diffindo.backend.dto.GroupCreationRequestDto;
-import com.diffindo.backend.dto.GroupFetchRequestDto;
 import com.diffindo.backend.dto.GroupFetchResponseDto;
 import com.diffindo.backend.exceptions.UserNotFoundException;
 import com.diffindo.backend.model.Group;
@@ -15,7 +14,6 @@ import com.diffindo.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,9 +21,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class GroupCreationService {
+public class GroupService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GroupCreationService.class);
+    private static final Logger logger = LoggerFactory.getLogger(GroupService.class);
 
     private final AppConstants APP_CONSTANTS;
     private final GroupRepository groupRepository;
@@ -40,8 +38,7 @@ public class GroupCreationService {
                 .status(APP_CONSTANTS.GROUP_PAYMENT_STATUS_PENDING)
                 .build();
 
-        // TODO: consider the order in which I save the group --> should I validate users first?
-
+        // TODO: consider the order in which I save the group, validate users first? --> yes this is a bug
         // save group to groups table
         groupRepository.save(group);
         logger.info("group {} saved to GROUPS table", group.getGroupId());
@@ -68,8 +65,17 @@ public class GroupCreationService {
                 .build();
     }
 
-    public GroupFetchResponseDto fetchAll(GroupFetchRequestDto groupFetchRequestDto) {
-        Optional<User> user = Optional.ofNullable(userRepository.findById(groupFetchRequestDto.getUserId())
+    public GroupFetchResponseDto fetchAll(String username) {
+        // obtain userId from username
+        Optional<User> requestingUser = userRepository.findByEmail(username);
+        if (requestingUser.isEmpty()) {
+            logger.info("userId could not be resolved from token");
+            throw new UserNotFoundException("userId could not be resolved from token");
+        }
+        Long userId = requestingUser.get().getUserId();
+
+        // TODO: this block may not be needed anymore
+        Optional<User> user = Optional.ofNullable(userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User attempting to retrieve groups does not exist.")));
 
         Optional<List<Group>> groups = groupRepository.findByGroupPhoneNumbersContaining(user.get().getPhoneNumber());
