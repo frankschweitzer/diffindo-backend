@@ -7,7 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CardSetRequestDto {
-    private Long userId;
     private String PAN;
     private String expirationDate;
     private String cvv;
